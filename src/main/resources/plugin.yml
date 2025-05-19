@@ -1,0 +1,15 @@
+name: ServerXRay
+version: '1.0-SNAPSHOT'
+main: santoro.serverXRay.ServerXRay
+api-version: '1.21'
+author: lucas-santoro
+description: A XRay plugin for servers
+
+commands:
+  xray:
+    description: Enable/disable xray vision
+    usage: /xray
+    permission: xray.use
+permissions:
+  xray.use:
+    default: true
