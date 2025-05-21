@@ -9,8 +9,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class ServerXRay extends JavaPlugin {
 
+    private static ServerXRay instance;
     @Override
     public void onEnable() {
+        instance = this;
         getLogger().info("ServerXRay Plugin enabled!");
         getCommand("xray").setExecutor(this);
     }
@@ -28,5 +30,9 @@ public class ServerXRay extends JavaPlugin {
         }
 
         return true;
+    }
+
+    public static ServerXRay get() {
+        return instance;
     }
 }
