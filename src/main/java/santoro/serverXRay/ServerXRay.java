@@ -11,7 +11,22 @@ public class ServerXRay extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getLogger().info("XRay Plugin ativado!");
+        getLogger().info("ServerXRay Plugin enabled!");
         getCommand("xray").setExecutor(this);
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!(sender instanceof Player p)) return true;
+
+        if (XRayRenderer.isActive(p)) {
+            XRayRenderer.disable(p);
+            p.sendMessage("§cXRay deactivated.");
+        } else {
+            new XRayRenderer(p).start();
+            p.sendMessage("§aXRay activated.");
+        }
+
+        return true;
     }
 }
