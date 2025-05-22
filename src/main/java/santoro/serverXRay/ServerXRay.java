@@ -22,6 +22,11 @@ public class ServerXRay extends JavaPlugin {
     }
 
     @Override
+    public void onDisable() {
+        getLogger().info("ServerXRay Plugin disabled!");
+    }
+
+    @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player p)) return true;
 
