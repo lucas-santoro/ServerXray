@@ -1,4 +1,4 @@
-package santoro.serverXRay;
+package santoro.serverXRay.command;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

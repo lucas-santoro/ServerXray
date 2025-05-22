@@ -1,11 +1,11 @@
-package santoro.serverXRay;
+package santoro.serverXRay.xray;
 
-import com.comphenix.protocol.PacketType;
 import fr.skytasul.glowingentities.GlowingBlocks;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import santoro.serverXRay.ServerXRay;
 
 import java.util.*;
 
