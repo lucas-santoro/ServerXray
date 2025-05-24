@@ -70,6 +70,12 @@ public class XRayRenderer {
         highlighted.clear();
     }
 
+    public void stop() {
+        if (task != null) task.cancel();
+        clear();
+    }
+
+
     public static boolean isActive(Player player) {
         return active.containsKey(player.getUniqueId());
     }
