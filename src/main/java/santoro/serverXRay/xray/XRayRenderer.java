@@ -1,11 +1,13 @@
 package santoro.serverXRay.xray;
 
 import fr.skytasul.glowingentities.GlowingBlocks;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import santoro.serverXRay.ServerXRay;
+import santoro.serverXRay.service.BlockFinderService;
 
 import java.util.*;
 
@@ -16,6 +18,7 @@ public class XRayRenderer {
     private BukkitRunnable task;
     private final List<Block> highlighted = new ArrayList<>();
     private static GlowingBlocks glowing;
+    private final BlockFinderService blockFinderService = new BlockFinderService(); // novo
 
     public XRayRenderer(Player player) {
         this.player = player;
@@ -36,21 +39,13 @@ public class XRayRenderer {
 
                 clear();
 
-                for (int dx = -radius; dx <= radius; dx++) {
-                    for (int dy = -radius; dy <= radius; dy++) {
-                        for (int dz = -radius; dz <= radius; dz++) {
-                            Location loc = center.clone().add(dx, dy, dz);
-                            Block block = loc.getBlock();
-
-                            if (block.getType() == Material.DIAMOND_ORE || block.getType() == Material.DEEPSLATE_DIAMOND_ORE) {
-                                try {
-                                    glowing.setGlowing(block, player, ChatColor.AQUA);
-                                    highlighted.add(block);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
+                List<Block> ores = blockFinderService.findNearbyOres(center, radius);
+                for (Block block : ores) {
+                    try {
+                        glowing.setGlowing(block, player, ChatColor.AQUA);
+                        highlighted.add(block);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -74,7 +69,6 @@ public class XRayRenderer {
         if (task != null) task.cancel();
         clear();
     }
-
 
     public static boolean isActive(Player player) {
         return active.containsKey(player.getUniqueId());
