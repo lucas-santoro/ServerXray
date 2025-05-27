@@ -8,11 +8,10 @@ import santoro.serverXRay.ServerXRay;
 import santoro.serverXRay.service.BlockFinderService;
 import santoro.serverXRay.service.HighlightService;
 
-import java.util.*;
+import java.util.List;
 
 public class XRayRenderer {
 
-    private static final Map<UUID, XRayRenderer> active = new HashMap<>();
     private final Player player;
     private BukkitRunnable task;
     private final BlockFinderService blockFinderService;
@@ -25,15 +24,13 @@ public class XRayRenderer {
     }
 
     public void start() {
-        active.put(player.getUniqueId(), this);
-
         task = new BukkitRunnable() {
             @Override
             public void run() {
                 Location center = player.getLocation();
                 int radius = 30;
 
-                highlightService.clear(player); // limpa antes
+                highlightService.clear(player);
                 List<Block> ores = blockFinderService.findNearbyOres(center, radius);
                 highlightService.highlight(player, ores);
             }
@@ -45,16 +42,5 @@ public class XRayRenderer {
     public void stop() {
         if (task != null) task.cancel();
         highlightService.clear(player);
-    }
-
-    public static boolean isActive(Player player) {
-        return active.containsKey(player.getUniqueId());
-    }
-
-    public static void disable(Player player) {
-        XRayRenderer renderer = active.remove(player.getUniqueId());
-        if (renderer != null) {
-            renderer.stop();
-        }
     }
 }

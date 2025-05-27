@@ -8,14 +8,20 @@ import santoro.serverXRay.session.SessionManager;
 
 public class ToggleXRayCommand implements CommandExecutor {
 
+    private final SessionManager sessionManager;
+
+    public ToggleXRayCommand(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage("§cOnly players can use this command.");
-            return true;
-        }
+        if (!(sender instanceof Player player)) return true;
 
-        SessionManager.toggle(player);
+        sessionManager.toggle(player);
+        player.sendMessage(sessionManager.isActive(player) ?
+                "§aXRay activated." :
+                "§cXRay deactivated.");
         return true;
     }
 }
