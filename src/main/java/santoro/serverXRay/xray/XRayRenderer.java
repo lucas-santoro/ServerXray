@@ -1,13 +1,12 @@
 package santoro.serverXRay.xray;
 
-import fr.skytasul.glowingentities.GlowingBlocks;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import santoro.serverXRay.ServerXRay;
 import santoro.serverXRay.service.BlockFinderService;
+import santoro.serverXRay.service.HighlightService;
 
 import java.util.*;
 
@@ -16,16 +15,13 @@ public class XRayRenderer {
     private static final Map<UUID, XRayRenderer> active = new HashMap<>();
     private final Player player;
     private BukkitRunnable task;
-    private final List<Block> highlighted = new ArrayList<>();
-    private static GlowingBlocks glowing;
-    private final BlockFinderService blockFinderService = new BlockFinderService(); // novo
+    private final BlockFinderService blockFinderService;
+    private final HighlightService highlightService;
 
-    public XRayRenderer(Player player) {
+    public XRayRenderer(Player player, BlockFinderService blockFinderService, HighlightService highlightService) {
         this.player = player;
-    }
-
-    public static void init(GlowingBlocks glowingBlocksInstance) {
-        glowing = glowingBlocksInstance;
+        this.blockFinderService = blockFinderService;
+        this.highlightService = highlightService;
     }
 
     public void start() {
@@ -37,37 +33,18 @@ public class XRayRenderer {
                 Location center = player.getLocation();
                 int radius = 30;
 
-                clear();
-
+                highlightService.clear(player); // limpa antes
                 List<Block> ores = blockFinderService.findNearbyOres(center, radius);
-                for (Block block : ores) {
-                    try {
-                        glowing.setGlowing(block, player, ChatColor.AQUA);
-                        highlighted.add(block);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+                highlightService.highlight(player, ores);
             }
         };
 
         task.runTaskTimer(ServerXRay.get(), 0L, 40L);
     }
 
-    public void clear() {
-        for (Block b : highlighted) {
-            try {
-                glowing.unsetGlowing(b, player);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        highlighted.clear();
-    }
-
     public void stop() {
         if (task != null) task.cancel();
-        clear();
+        highlightService.clear(player);
     }
 
     public static boolean isActive(Player player) {
@@ -76,9 +53,8 @@ public class XRayRenderer {
 
     public static void disable(Player player) {
         XRayRenderer renderer = active.remove(player.getUniqueId());
-        if (renderer != null && renderer.task != null) {
-            renderer.task.cancel();
-            renderer.clear();
+        if (renderer != null) {
+            renderer.stop();
         }
     }
 }
