@@ -1,5 +1,6 @@
 package santoro.serverXRay.xray;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -30,9 +31,14 @@ public class XRayRenderer {
                 Location center = player.getLocation();
                 int radius = 30;
 
-                highlightService.clear(player);
-                List<Block> ores = blockFinderService.findNearbyOres(center, radius);
-                highlightService.highlight(player, ores);
+                Bukkit.getScheduler().runTaskAsynchronously(ServerXRay.get(), () -> {
+                    List<Block> ores = blockFinderService.findNearbyOres(center, radius);
+
+                    Bukkit.getScheduler().runTask(ServerXRay.get(), () -> {
+                        highlightService.clear(player);
+                        highlightService.highlight(player, ores);
+                    });
+                });
             }
         };
 
