@@ -2,6 +2,7 @@ package santoro.serverXRay.service;
 
 import fr.skytasul.glowingentities.GlowingBlocks;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -11,17 +12,20 @@ public class HighlightService {
 
     private final GlowingBlocks glowing;
     private final Map<UUID, List<Block>> highlightedBlocks = new HashMap<>();
+    private final Map<Material, ChatColor> colorMap;
 
-    public HighlightService(GlowingBlocks glowing) {
+    public HighlightService(GlowingBlocks glowing, Map<Material, ChatColor> colorMap) {
         this.glowing = glowing;
+        this.colorMap = colorMap;
     }
 
     public void highlight(Player player, List<Block> blocks) {
         List<Block> highlighted = new ArrayList<>();
 
         for (Block block : blocks) {
+            ChatColor color = colorMap.getOrDefault(block.getType(), ChatColor.WHITE);
             try {
-                glowing.setGlowing(block, player, ChatColor.AQUA);
+                glowing.setGlowing(block, player, color);
                 highlighted.add(block);
             } catch (Exception e) {
                 e.printStackTrace();

@@ -4,10 +4,15 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class BlockFinderService {
+
+    private final Set<Material> validBlocks;
+
+    public BlockFinderService(Set<Material> validBlocks) {
+        this.validBlocks = validBlocks;
+    }
 
     public List<Block> findNearbyOres(Location center, int radius) {
         List<Block> found = new ArrayList<>();
@@ -17,9 +22,7 @@ public class BlockFinderService {
                 for (int dz = -radius; dz <= radius; dz++) {
                     Location loc = center.clone().add(dx, dy, dz);
                     Block block = loc.getBlock();
-                    Material type = block.getType();
-
-                    if (type == Material.DIAMOND_ORE || type == Material.DEEPSLATE_DIAMOND_ORE) {
+                    if (validBlocks.contains(block.getType())) {
                         found.add(block);
                     }
                 }
