@@ -29,7 +29,7 @@ public class XRayRenderer {
             @Override
             public void run() {
                 Location center = player.getLocation();
-                int radius = 30;
+                int radius = ServerXRay.get().getConfig().getInt("xray.radius", 30);
 
                 Bukkit.getScheduler().runTaskAsynchronously(ServerXRay.get(), () -> {
                     List<Block> ores = blockFinderService.findNearbyOres(center, radius);
