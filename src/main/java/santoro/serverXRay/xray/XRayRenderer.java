@@ -28,6 +28,7 @@ public class XRayRenderer {
         task = new BukkitRunnable() {
             @Override
             public void run() {
+                if (!player.isOnline() || !player.isValid()) return;
                 Location center = player.getLocation();
                 int radius = ServerXRay.get().getConfig().getInt("xray.radius", 30);
 
@@ -47,6 +48,7 @@ public class XRayRenderer {
     }
 
     public void stop() {
+        if (!player.isOnline() || !player.isValid()) return;
         if (task != null) task.cancel();
         highlightService.clear(player);
     }

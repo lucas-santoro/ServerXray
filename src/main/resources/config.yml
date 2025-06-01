@@ -1,5 +1,6 @@
 xray:
   radius: 30
+  # In ticks; 20 = 1 second
   interval: 40
   highlights:
     DIAMOND_ORE: AQUA
