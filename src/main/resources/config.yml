@@ -1,0 +1,8 @@
+xray:
+  radius: 30
+  highlights:
+    DIAMOND_ORE: AQUA
+    DEEPSLATE_DIAMOND_ORE: BLUE
+    GOLD_ORE: GOLD
+    IRON_ORE: YELLOW
+    EMERALD_ORE: GREEN
