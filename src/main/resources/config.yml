@@ -1,5 +1,6 @@
 xray:
   radius: 30
+  interval: 40
   highlights:
     DIAMOND_ORE: AQUA
     DEEPSLATE_DIAMOND_ORE: BLUE

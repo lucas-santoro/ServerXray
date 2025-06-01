@@ -42,7 +42,8 @@ public class XRayRenderer {
             }
         };
 
-        task.runTaskTimer(ServerXRay.get(), 0L, 40L);
+        int interval = ServerXRay.get().getConfig().getInt("xray.interval", 40);
+        task.runTaskTimer(ServerXRay.get(), 0L, interval);
     }
 
     public void stop() {
